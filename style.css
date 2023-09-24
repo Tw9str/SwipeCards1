@@ -147,7 +147,7 @@ body {
   color: #cdd6dd;
 }
 
-form {
+form.contact-form {
   position: relative;
   display: flex;
   align-items: flex-start;
@@ -160,6 +160,16 @@ form {
   padding: 20px;
   border-radius: 10px;
   box-shadow: 0 30px 30px -30px rgba(27, 26, 26, 0.315);
+  visibility: hidden;
+  transform: scale(0.5);
+  opacity: 0;
+  transition: 0.3s;
+  transition-delay: 0.5s;
+}
+form.contact-form.active {
+  visibility: visible;
+  transform: scale(1);
+  opacity: 1;
 }
 form header {
   display: flex;

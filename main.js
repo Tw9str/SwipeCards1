@@ -18,6 +18,14 @@ var tinderContainer = document.querySelector(".tinder");
 var allCards = document.querySelectorAll(".tinder--card");
 var nope = document.getElementById("nope");
 var love = document.getElementById("love");
+const contactForm = document.querySelector(".contact-form");
+
+function areCardsLeft() {
+  const remainingCards = document.querySelectorAll(
+    ".tinder--card:not(.removed)"
+  );
+  return remainingCards.length > 0;
+}
 
 function initCards(card, index) {
   var newCards = document.querySelectorAll(".tinder--card:not(.removed)");
@@ -72,6 +80,12 @@ allCards.forEach(function (el) {
 
     event.target.classList.toggle("removed", !keep);
 
+    if (!areCardsLeft()) {
+      contactForm.classList.add("active");
+      love.style.display = "none";
+      nope.style.display = "none";
+    }
+
     if (keep) {
       event.target.style.transform = "";
     } else {
@@ -104,21 +118,35 @@ function createButtonListener(love) {
     var cards = document.querySelectorAll(".tinder--card:not(.removed)");
     var moveOutWidth = document.body.clientWidth * 1.5;
 
-    if (!cards.length) return false;
-
     var card = cards[0];
 
-    card.classList.add("removed");
+    if (card) {
+      card.classList.add("removed");
 
-    if (love) {
-      card.style.transform =
-        "translate(" + moveOutWidth + "px, -100px) rotate(-30deg)";
-    } else {
-      card.style.transform =
-        "translate(-" + moveOutWidth + "px, -100px) rotate(30deg)";
+      if (love) {
+        card.style.transform =
+          "translate(" + moveOutWidth + "px, -100px) rotate(-30deg)";
+        tinderContainer.classList.add("tinder_love");
+      } else {
+        card.style.transform =
+          "translate(-" + moveOutWidth + "px, -100px) rotate(30deg)";
+        tinderContainer.classList.add("tinder_nope");
+      }
+
+      initCards();
     }
 
-    initCards();
+    if (!areCardsLeft()) {
+      // No cards left, trigger your code here
+      contactForm.classList.add("active");
+      document.getElementById("love").style.display = "none";
+      document.getElementById("nope").style.display = "none";
+    }
+
+    // Add a delay of 1 second (1000 milliseconds) before removing the classes
+    setTimeout(function () {
+      tinderContainer.classList.remove("tinder_love", "tinder_nope");
+    }, 300);
 
     event.preventDefault();
   };
